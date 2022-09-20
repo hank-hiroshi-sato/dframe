@@ -1,0 +1,61 @@
+<script type="text/javascript">
+
+  function returnWindow(fieldNm, value) {
+    // 親ウィンドウの存在チェック
+    if(!window.opener || window.opener.closed){
+       window.alert('親ウィンドウがありません。');
+       return false;
+    }
+    let elem =  window.opener.document.getElementById("chl_name");
+    elem.innerHTML='XXXX'
+    //console.log(elem);
+    //let elem2 =  document.getElementById("searchID_0");
+    //console.log(elem2);
+
+    // 子ウィンドから親ウィンドウへ値を渡す    
+    window.opener.document.getElementById('chl_name').innerHTML = 'vvvv';
+    window.opener.document.getElementById('chl_name').textContent = 'BBBB'
+    //window.close();
+  }
+
+</script>
+
+<h4 class="mt-4 border-bottom">{{formCaption}}の検索</h4>
+<form action="" method="post" >
+    <p>検索したいキーワードを入力してください。</p>
+    <input type="search" name="search" placeholder="キーワードを入力">
+    <input type="search" name="formID"  value={{momFormID}} style="display : none">
+    <input type="submit" name="submit" value="検索">
+</form>
+
+<table class="table table-striped table-bordered">
+  <thead>
+    <tr>
+      {% for  i in range( formColumns|length) %}
+        {% if formColumns[i]['caption'] == 'id' %}
+            <th scope="row">　　</th>
+        {% else %} 
+            <th scope="row">{{formColumns[i]['caption']}}</th>
+        {% endif %} 
+      {% endfor %} 
+    </tr>
+  </thead>
+  <tbody>
+    {% for  i in range( formData|length) %}
+    <tr>
+      {% for  f in fldList %}  
+        {% if f == 'id' %}
+          <td scope="row" id= searchID_{{i}}>
+            <input type="button" value="選択" onclick="returnWindow('aa','bb')" />
+                        
+          </td>
+        {% else %}
+          <td scope="row" id=search{{f}}_{{i}}>{{formData[i][f]}} </td> 
+        {% endif %}
+      {% endfor %} 
+    </tr>
+    {% endfor %}
+    <script type="module" src="index.js"></script>
+  </tbody>
+</table>
+

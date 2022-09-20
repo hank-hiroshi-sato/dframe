@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+{% block extra_css %}{% endblock %}
+<title>{% block title %}dFrame{% endblock %}</title>
+</head>
+
+<body>
+  <style type="text/css">
+    body {margin: 4;padding: 0; line-height: 10px;}
+    .colleft{float:left; height:10px; width: 15%;}
+    .colright{float:right; height: 10px; width: 85%; }
+  </style>
+  <div class="container">
+    {% block content %}
+      {{ content }}
+    {% endblock %} 
+    <form method="POST">
+      {% for pb in range(pageButton|length) %}  
+        {% if pageBtnOnOff[pb] == 'disabled' %}
+          <button type="submit" disabled
+            formaction="/dframe/navi/form{{urlPath}}/">
+            {{pageBtnCap[pb]}}
+          </button>  
+        {% else %}
+          <button type="submit" 
+            {% if viewID >0 %}
+              formaction="/dframe/navi/form{{urlPath}}&offset= {{pageOffset[pb]}}">
+            {% else %}
+              formaction="/dframe/navi/form{{urlPath}}?offset= {{pageOffset[pb]}}">
+            {% endif %}
+            {{pageBtnCap[pb]}}
+          </button>
+        {% endif %}
+      {% endfor %}
+    </form>
+    <form method="POST">
+      {% for b in range(formButton|length) %}
+          {% if formButton[b]['actionType'] in ('b','c') %}  
+            <button type="submit" id='btn_bc'
+              formaction="/dframe/navi/btn/{{formButton[b]['actionType']}}/{{formID}}/{{roleID}}/">
+              {{formButton[b]['caption']}} 
+            </button>
+          {% elif formButton[b]['actionType'] in ('n') %}
+              <button type="submit" id='btn_n'
+              formaction="/dframe/navi/btn/{{formButton[b]['actionType']}}/{{formButton[b]['destinFormID']}}/{{roleID}}/">
+                {{formButton[b]['caption']}} 
+              </button>
+          {% endif %}
+      {% endfor %}
+    </form>
+  </div>
+</body>
+
+{% block extra_js %}{% endblock %}
+</html>

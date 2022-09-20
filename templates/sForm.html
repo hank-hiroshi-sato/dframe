@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<script  language="javascript" type="text/javascript">
+
+    function openWindow(url, name) {
+        window.open(url, name, 'width=400,height=300');
+      }      
+    
+</script>
+{% block extra_css %}{% endblock %}
+<title>{% block title %}My books{% endblock %}</title>
+
+</head>
+<body>
+<form method="POST">  
+    <style type="text/css">
+      body {margin: 4;padding: 0; line-height: 10px;}
+      .colleft{float:left; height:10px; width: 15%;}
+      .colright{float:right; height: 10px; width: 85%;}
+    </style>
+    <h4 class="mt-4 border-bottom">{{formPrpty[0]['Title']}}</h4>
+    <form method="POST" target="_blank">
+        {% for  i in range( formColumns|length) %}
+            {% if formColumns[i]['isVisible'] == 1 %}
+                <p class="colleft">        
+                        {{formColumns[i]['caption']}} 
+                </p>
+                
+                <p class="colright">
+                    {% if formColumns[i]['slctStyle'] == 'lookup'  %}
+                        <select id={{formColumns[i]['name']}} name={{formColumns[i]['name']}}>
+                        {% for b in range(baseValueList|length) %} 
+                            {% if baseValueList[b]['catName'] == formColumns[i]['cmbStrainObjNm'] %}
+                                {% if baseValueList[b]['value'] == fldVal[i] %}
+                                    <option value= {{baseValueList[b]['value']}} selected>
+                                        {{baseValueList[b]['caption']}} 
+                                    </option>
+                                {% else %}
+                                    <option value= {{baseValueList[b]['value']}} >
+                                        {{baseValueList[b]['caption']}} 
+                                    </option>
+                                {% endif %}
+                            {% endif  %}
+                        {% endfor %}
+                        </select>
+                    {% else %}
+                        {% if not fldVal %}
+                            {% if formColumns[i]['isReadOnly'] == 1 %}
+                                <input type="text" id={{formColumns[i]['name']}} name={{formColumns[i]['name']}}   value="" readonly
+                                style="background-color:silver">
+                            {% else %}
+                                <input type="text" id={{formColumns[i]['name']}} name={{formColumns[i]['name']}}  value="">
+                            {% endif %}
+                        {% elif fldVal[i] != None %}
+                            {% if formColumns[i]['isReadOnly'] == 1 %}
+                                <input type="text" id={{formColumns[i]['name']}} name={{formColumns[i]['name']}}  value={{fldVal[i]}} readonly
+                                style="background-color:silver">                                                
+                            {% else %}
+                                <input type="text" id={{formColumns[i]['name']}} name={{formColumns[i]['name']}}  value={{fldVal[i]}}> 
+                            {% endif %}
+                        {% endif %}
+
+                    {% endif %}
+                        {% if formColumns[i]['slctStyle'] == 'searchButton' %}  
+                            <input type="button" value="▼" onclick="openWindow('/dframe/fsel/{{formID}}/{{i}}/{{roleID}}', 'mom_window1')" />
+                        {% endif %}
+                </p>
+            {% else %}
+                {% if not fldVal %}
+                    <input type="text" id={{formColumns[i]['name']}} name={{formColumns[i]['name']}}  value="" style="display : none">
+                {% else %}
+                    <input type="text" id={{formColumns[i]['name']}} name={{formColumns[i]['name']}} value={{fldVal[i]}} style="display : none">
+                {% endif %}
+            {% endif %}
+        {% endfor %} 
+<!--    </form>
+    <form method="POST" > -->
+    {% for b in range(formButton|length) %}  
+        <button type="submit" formaction="/dframe/navi/btn/{{btnList[b]}}/{{formID}}/{{roleID}}/">
+        {{formButton[b]['caption']}} 
+        </button>
+    {% endfor %}
+    <!-- </form> -->
+</form>
+</div>
